@@ -1,5 +1,6 @@
 import './nullstyle.css'
 import './App.css'
+import {useState} from "react";
 
 const tasks
     = [
@@ -41,6 +42,8 @@ const tasks
 ]
 
 
+
+
 interface Colors {
     [key:number]: string
 }
@@ -56,6 +59,8 @@ const colors:Colors = {
 
 function App() {
 
+    let [selectedTaskId, setSelectedTaskId] = useState(null)
+
     if (tasks === null || tasks === undefined) {
         return <div className={'li__div li__span'}>Загрузка...</div>
     }
@@ -67,11 +72,26 @@ function App() {
 
   return (
         <div>
+            <button className={'button'}
+                    onClick={ () => {
+                setSelectedTaskId(null)
+            }}> Сбросить Выделение</button>
             <ul>
                 {tasks.map((task) => {
-                   return <li key={task.id} className={'li__task'} style={{
-                       backgroundColor: colors[task.priority] || 'white'
-                   }}>
+                   return <li
+                       key={task.id}
+                       className={'li__task'}
+                       onClick={ () => {
+                        setSelectedTaskId(task.id)
+                       }}
+                              style={
+                       {
+                       backgroundColor: colors[task.priority] || 'white',
+                           border: selectedTaskId === task.id ? '4px solid blue' : '4px solid black'
+
+                   }
+                   }
+                   >
                       <div className={'li__div'}> <span className={'li__span'}> Заголовок: </span> <span style={ {
                           textDecorationLine: task.isDone ? 'line-through' : 'none'
                       }}> {task.title} </span> </div>
