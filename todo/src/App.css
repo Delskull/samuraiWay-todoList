@@ -1,0 +1,15 @@
+.li__task{
+    display: flex;
+    flex-direction: column;
+    margin: 20px;
+    border: 4px solid black;
+}
+.li__span {
+    font-weight: bold;
+}
+#root{
+    display: flex;
+}
+.li__div {
+    margin: 5px
+}
