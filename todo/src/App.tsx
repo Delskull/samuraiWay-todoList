@@ -1,45 +1,45 @@
 import './nullstyle.css'
 import './App.css'
-import {useState} from "react";
+import {useEffect, useState} from "react";
 
-const tasks
-    = [
-    {
-        id: 1,
-        title: "Купить продукты на неделю",
-        isDone: false,
-        addedAt: "1 сентября",
-        priority: 2,
-    },
-    {
-        id: 2,
-        title: "Полить цветы",
-        isDone: true,
-        addedAt: "2 сентября",
-        priority: 0,
-    },
-    {
-        id: 3,
-        title: "Сходить на тренировку",
-        isDone: false,
-        addedAt: "3 сентября",
-        priority: 1,
-    },
-    {
-        id: 4,
-        title: "Срочно отправить рабочий отчет",
-        isDone: false,
-        addedAt: "4 сентября",
-        priority: 4,
-    },
-    {
-        id: 5,
-        title: "Заплатить за коммунальные услуги",
-        isDone: false,
-        addedAt: "3 сентября",
-        priority: 3,
-    },
-]
+// const tasks
+//     = [
+//     {
+//         id: 1,
+//         title: "Купить продукты на неделю",
+//         isDone: false,
+//         addedAt: "1 сентября",
+//         priority: 2,
+//     },
+//     {
+//         id: 2,
+//         title: "Полить цветы",
+//         isDone: true,
+//         addedAt: "2 сентября",
+//         priority: 0,
+//     },
+//     {
+//         id: 3,
+//         title: "Сходить на тренировку",
+//         isDone: false,
+//         addedAt: "3 сентября",
+//         priority: 1,
+//     },
+//     {
+//         id: 4,
+//         title: "Срочно отправить рабочий отчет",
+//         isDone: false,
+//         addedAt: "4 сентября",
+//         priority: 4,
+//     },
+//     {
+//         id: 5,
+//         title: "Заплатить за коммунальные услуги",
+//         isDone: false,
+//         addedAt: "3 сентября",
+//         priority: 3,
+//     },
+// ]
 
 
 
@@ -59,7 +59,17 @@ const colors:Colors = {
 
 function App() {
 
-    let [selectedTaskId, setSelectedTaskId] = useState(null)
+    const [selectedTaskId, setSelectedTaskId] = useState(null)
+    const [tasks, setTasks] = useState(null)
+
+    useEffect(() => {
+     fetch('https://trelly.it-incubator.app/api/1.0/boards/tasks', {
+         headers: {
+            'api-key': 'a4ac3cd8-354c-4073-b62b-8eac19a5e922'
+         }
+     }) .then(res => res.json())
+         .then(json => setTasks(json.data))
+    }, []);
 
     if (tasks === null || tasks === undefined) {
         return <div className={'li__div li__span'}>Загрузка...</div>
@@ -86,17 +96,17 @@ function App() {
                        }}
                               style={
                        {
-                       backgroundColor: colors[task.priority] || 'white',
+                       backgroundColor: colors[task.attributes.priority] || 'white',
                            border: selectedTaskId === task.id ? '4px solid blue' : '4px solid black'
 
                    }
                    }
                    >
                       <div className={'li__div'}> <span className={'li__span'}> Заголовок: </span> <span style={ {
-                          textDecorationLine: task.isDone ? 'line-through' : 'none'
-                      }}> {task.title} </span> </div>
-                       <div className={'li__div'} > <span className={'li__span'}> Статус: </span> {task.isDone} <input  type={"checkbox"} checked={task.isDone} /> </div>
-                       <div className={'li__div'}>  <span className={'li__span'}> </span> Дата создания задачи: {task.addedAt}</div>
+                          textDecorationLine: task.attributes.status >= 2 ? 'line-through' : 'none'
+                      }}> {task.attributes.title} </span> </div>
+                       <div className={'li__div'} > <span className={'li__span'}> Статус: </span> {task.attributes.status} <input  type={"checkbox"}  checked={task.attributes.status >= 2}   /> </div>
+                       <div className={'li__div'}>  <span className={'li__span'}> </span> Дата создания задачи: {new Date(task.attributes.addedAt).toLocaleDateString()}</div>
 
                    </li>
                 })}
