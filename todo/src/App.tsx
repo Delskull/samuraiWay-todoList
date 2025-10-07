@@ -42,33 +42,33 @@ import {useEffect, useState} from "react";
 // ]
 
 
-
-
 interface Colors {
-    [key:number]: string
+    [key: number]: string
 }
-const colors:Colors = {
 
-        0: '#ffffff',
-        1: '#ffd7b5',
-        2: '#ffb38a',
-        3: '#ff9248',
-        4: '#ff6700',
-    }
+const colors: Colors = {
+
+    0: '#ffffff',
+    1: '#ffd7b5',
+    2: '#ffb38a',
+    3: '#ff9248',
+    4: '#ff6700',
+}
 
 
 function App() {
 
     const [selectedTaskId, setSelectedTaskId] = useState(null)
     const [tasks, setTasks] = useState(null)
+    const [selectedTask, setSelectedTask] = useState(null)
 
     useEffect(() => {
-     fetch('https://trelly.it-incubator.app/api/1.0/boards/tasks', {
-         headers: {
-            'api-key': 'a4ac3cd8-354c-4073-b62b-8eac19a5e922'
-         }
-     }) .then(res => res.json())
-         .then(json => setTasks(json.data))
+        fetch('https://trelly.it-incubator.app/api/1.0/boards/tasks', {
+            headers: {
+                'api-key': 'a4ac3cd8-354c-4073-b62b-8eac19a5e922'
+            }
+        }).then(res => res.json())
+            .then(json => setTasks(json.data))
     }, []);
 
     if (tasks === null || tasks === undefined) {
@@ -80,39 +80,76 @@ function App() {
     }
 
 
-  return (
+    return (
         <div>
+
             <button className={'button'}
-                    onClick={ () => {
-                setSelectedTaskId(null)
-            }}> Сбросить Выделение</button>
+                    onClick={() => {
+                        setSelectedTaskId(null)
+                        setSelectedTask(null)
+                    }}> Сбросить Выделение
+            </button>
+            <div style={{
+                display: 'flex',
+                gap: '30px'
+            }}>
             <ul>
                 {tasks.map((task) => {
-                   return <li
-                       key={task.id}
-                       className={'li__task'}
-                       onClick={ () => {
-                        setSelectedTaskId(task.id)
-                       }}
-                              style={
-                       {
-                       backgroundColor: colors[task.attributes.priority] || 'white',
-                           border: selectedTaskId === task.id ? '4px solid blue' : '4px solid black'
+                    return <li
+                        key={task.id}
+                        className={'li__task'}
+                        onClick={() => {
+                            setSelectedTaskId(task.id)
+                            setSelectedTask(task)
 
-                   }
-                   }
-                   >
-                      <div className={'li__div'}> <span className={'li__span'}> Заголовок: </span> <span style={ {
-                          textDecorationLine: task.attributes.status >= 2 ? 'line-through' : 'none'
-                      }}> {task.attributes.title} </span> </div>
-                       <div className={'li__div'} > <span className={'li__span'}> Статус: </span> {task.attributes.status} <input  type={"checkbox"}  checked={task.attributes.status >= 2}   /> </div>
-                       <div className={'li__div'}>  <span className={'li__span'}> </span> Дата создания задачи: {new Date(task.attributes.addedAt).toLocaleDateString()}</div>
+                            fetch('https://trelly.it-incubator.app/api/1.0/boards/' + task.attributes.boardId + '/tasks/' + task.id, {
+                                headers: {
+                                    'api-key': 'a4ac3cd8-354c-4073-b62b-8eac19a5e922'
+                                }
+                            }).then(res => res.json())
+                                .then(json => setSelectedTask(json.data))
 
-                   </li>
+
+
+                        }}
+                        style={
+                            {
+                                backgroundColor: colors[task.attributes.priority] || 'white',
+                                border: selectedTaskId === task.id ? '4px solid blue' : '4px solid black'
+
+                            }
+                        }
+                    >
+                        <div className={'li__div'}><span className={'li__span'}> Заголовок: </span> <span style={{
+                            textDecorationLine: task.attributes.status >= 2 ? 'line-through' : 'none'
+                        }}> {task.attributes.title} </span></div>
+                        <div className={'li__div'}><span
+                            className={'li__span'}> Статус: </span> {task.attributes.status} <input type={"checkbox"}
+                                                                                                    checked={task.attributes.status >= 2}/>
+                        </div>
+                        <div className={'li__div'}><span className={'li__span'}> </span> Дата создания
+                            задачи: {new Date(task.attributes.addedAt).toLocaleDateString()}</div>
+
+                    </li>
                 })}
             </ul>
+            <div className={'info__block'}>
+                <h2 > Task details </h2>
+                {selectedTask === null ? 'Task is not selected' :
+                <div>
+                    <ul>
+                        <li className={'li__description'}> Title - {selectedTask.attributes.title}</li>
+                        <li className={'li__description'}> BoardTitle - {selectedTask.attributes.boardTitle}</li>
+                        {selectedTask.attributes.description === null ?
+                            <li className={'li__description'}> Description - No description</li> :
+                            <li className={'li__description'}> Description - {selectedTask.attributes.description}</li>}
+                    </ul>
+                </div>
+                }
+            </div>
+            </div>
         </div>
-  )
+    )
 }
 
 export default App
