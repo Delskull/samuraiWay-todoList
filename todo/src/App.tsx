@@ -93,60 +93,63 @@ function App() {
                 display: 'flex',
                 gap: '30px'
             }}>
-            <ul>
-                {tasks.map((task) => {
-                    return <li
-                        key={task.id}
-                        className={'li__task'}
-                        onClick={() => {
-                            setSelectedTaskId(task.id)
-                            setSelectedTask(task)
+                <ul>
+                    {tasks.map((task) => {
+                        return <li
+                            key={task.id}
+                            className={'li__task'}
+                            onClick={() => {
+                                setSelectedTaskId(task.id)
+                                setSelectedTask({loading: true})
 
-                            fetch('https://trelly.it-incubator.app/api/1.0/boards/' + task.attributes.boardId + '/tasks/' + task.id, {
-                                headers: {
-                                    'api-key': 'a4ac3cd8-354c-4073-b62b-8eac19a5e922'
+                                fetch('https://trelly.it-incubator.app/api/1.0/boards/' + task.attributes.boardId + '/tasks/' + task.id, {
+                                    headers: {
+                                        'api-key': 'a4ac3cd8-354c-4073-b62b-8eac19a5e922'
+                                    }
+                                }).then(res => res.json())
+                                    .then(json => setSelectedTask(json.data))
+
+
+                            }}
+                            style={
+                                {
+                                    backgroundColor: colors[task.attributes.priority] || 'white',
+                                    border: selectedTaskId === task.id ? '4px solid blue' : '4px solid black'
+
                                 }
-                            }).then(res => res.json())
-                                .then(json => setSelectedTask(json.data))
-
-
-
-                        }}
-                        style={
-                            {
-                                backgroundColor: colors[task.attributes.priority] || 'white',
-                                border: selectedTaskId === task.id ? '4px solid blue' : '4px solid black'
-
                             }
-                        }
-                    >
-                        <div className={'li__div'}><span className={'li__span'}> Заголовок: </span> <span style={{
-                            textDecorationLine: task.attributes.status >= 2 ? 'line-through' : 'none'
-                        }}> {task.attributes.title} </span></div>
-                        <div className={'li__div'}><span
-                            className={'li__span'}> Статус: </span> {task.attributes.status} <input type={"checkbox"}
-                                                                                                    checked={task.attributes.status >= 2}/>
-                        </div>
-                        <div className={'li__div'}><span className={'li__span'}> </span> Дата создания
-                            задачи: {new Date(task.attributes.addedAt).toLocaleDateString()}</div>
+                        >
+                            <div className={'li__div'}><span className={'li__span'}> Заголовок: </span> <span style={{
+                                textDecorationLine: task.attributes.status >= 2 ? 'line-through' : 'none'
+                            }}> {task.attributes.title} </span></div>
+                            <div className={'li__div'}><span
+                                className={'li__span'}> Статус: </span> {task.attributes.status} <input
+                                type={"checkbox"}
+                                checked={task.attributes.status >= 2}/>
+                            </div>
+                            <div className={'li__div'}><span className={'li__span'}> </span> Дата создания
+                                задачи: {new Date(task.attributes.addedAt).toLocaleDateString()}</div>
 
-                    </li>
-                })}
-            </ul>
-            <div className={'info__block'}>
-                <h2 > Task details </h2>
-                {selectedTask === null ? 'Task is not selected' :
-                <div>
-                    <ul>
-                        <li className={'li__description'}> Title - {selectedTask.attributes.title}</li>
-                        <li className={'li__description'}> BoardTitle - {selectedTask.attributes.boardTitle}</li>
-                        {selectedTask.attributes.description === null ?
-                            <li className={'li__description'}> Description - No description</li> :
-                            <li className={'li__description'}> Description - {selectedTask.attributes.description}</li>}
-                    </ul>
+                        </li>
+                    })}
+                </ul>
+                <div className={'info__block'}>
+                    <h2> Task details </h2>
+                    {selectedTask?.loading ? 'Loading...' :
+                        selectedTask === null ? 'Task is not selected' :
+                        <div>
+                            <ul>
+                                <li className={'li__description'}> Title - {selectedTask.attributes.title}</li>
+                                <li className={'li__description'}> BoardTitle
+                                    - {selectedTask.attributes.boardTitle}</li>
+                                {selectedTask.attributes.description === null ?
+                                    <li className={'li__description'}> Description - No description</li> :
+                                    <li className={'li__description'}> Description
+                                        - {selectedTask.attributes.description}</li>}
+                            </ul>
+                        </div>
+                    }
                 </div>
-                }
-            </div>
             </div>
         </div>
     )
