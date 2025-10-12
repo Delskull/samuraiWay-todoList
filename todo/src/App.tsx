@@ -61,6 +61,7 @@ function App() {
     const [selectedTaskId, setSelectedTaskId] = useState(null)
     const [tasks, setTasks] = useState(null)
     const [selectedTask, setSelectedTask] = useState(null)
+    const [boardId, setBoardId] = useState(null)
 
     useEffect(() => {
         fetch('https://trelly.it-incubator.app/api/1.0/boards/tasks', {
@@ -70,6 +71,19 @@ function App() {
         }).then(res => res.json())
             .then(json => setTasks(json.data))
     }, []);
+
+    useEffect(() => {
+        if (!selectedTaskId) {
+            return
+        }
+
+        fetch('https://trelly.it-incubator.app/api/1.0/boards/' + boardId + '/tasks/' + selectedTaskId, {
+            headers: {
+                'api-key': 'a4ac3cd8-354c-4073-b62b-8eac19a5e922'
+            }
+        }).then(res => res.json())
+            .then(json => setSelectedTask(json.data))
+    }, [selectedTaskId]);
 
     if (tasks === null || tasks === undefined) {
         return <div className={'li__div li__span'}>Загрузка...</div>
@@ -87,6 +101,7 @@ function App() {
                     onClick={() => {
                         setSelectedTaskId(null)
                         setSelectedTask(null)
+                        setSelectedTaskId(null)
                     }}> Сбросить Выделение
             </button>
             <div style={{
@@ -100,15 +115,7 @@ function App() {
                             className={'li__task'}
                             onClick={() => {
                                 setSelectedTaskId(task.id)
-                                setSelectedTask({loading: true})
-
-                                fetch('https://trelly.it-incubator.app/api/1.0/boards/' + task.attributes.boardId + '/tasks/' + task.id, {
-                                    headers: {
-                                        'api-key': 'a4ac3cd8-354c-4073-b62b-8eac19a5e922'
-                                    }
-                                }).then(res => res.json())
-                                    .then(json => setSelectedTask(json.data))
-
+                                setBoardId(task.attributes.boardId)
 
                             }}
                             style={
@@ -135,8 +142,10 @@ function App() {
                 </ul>
                 <div className={'info__block'}>
                     <h2> Task details </h2>
-                    {selectedTask?.loading ? 'Loading...' :
-                        selectedTask === null ? 'Task is not selected' :
+                    {!selectedTask && !selectedTaskId && 'Task is not selected'}
+                    {!selectedTask && selectedTaskId && 'Loading...'}
+                    {selectedTask && selectedTaskId && selectedTask.id !== selectedTaskId && 'Loading...'}
+                    {selectedTask && selectedTaskId && selectedTask.id == selectedTaskId &&
                         <div>
                             <ul>
                                 <li className={'li__description'}> Title - {selectedTask.attributes.title}</li>
