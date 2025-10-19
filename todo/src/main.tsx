@@ -19,6 +19,6 @@ function MainPage() {
         <TaskList/>
         <TaskDetails/>
         </div>
-        <Footer/>
+
     </div>
 }
