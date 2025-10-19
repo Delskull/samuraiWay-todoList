@@ -1,0 +1,10 @@
+.user__card {
+    width: 80%;
+    border: 2px solid black;
+    padding: 20px;
+
+}
+li{
+    padding-bottom: 20px;
+    list-style: none;
+}
