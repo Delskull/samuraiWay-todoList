@@ -1,24 +1,37 @@
 import {createRoot} from 'react-dom/client'
 import './App.css'
-import {Header} from "./components/Header.tsx";
-import {TaskList} from "./components/TaskList.tsx";
-import {TaskDetails} from "./components/TaskDetails.tsx";
-import {Footer} from "./components/Footer.tsx";
-import {PageTitle} from "./components/PageTitle.tsx";
+import {UserCard} from "./components/UserCard.tsx";
 
 
 createRoot(document.getElementById('root')!).render(
-    <MainPage/>
+    <Users />
 )
 
-function MainPage() {
-    return <div>
-        <Header/>
-        <PageTitle/>
-        <div style={{display: 'flex', gap: '30px'}}>
-        <TaskList/>
-        <TaskDetails/>
-        </div>
+export function Users() {
+    const users = [
+        {
+            id: 1,
+            name: "John",
+            age: 32,
+            email: "john@gmail.com",
+            avatar: "https://tinyurl.com/4ez2s7mt",
+        },
+        {
+            id: 2,
+            name: "Alice",
+            age: 17,
+            email: "alice@yahoo.com",
+            avatar: "https://tinyurl.com/ynyx9nhu",
+        },
+        { id: 3, name: "Mike", age: 44, email: "mike@hotmail.com" },
+        {
+            id: 4,
+            name: "Sarah",
+            age: 29,
+            email: "sarah@gmail.com",
+            avatar: "https://tinyurl.com/yyktspmh",
+        },
+    ]
 
-    </div>
+    return <div>sdsd</div>
 }
