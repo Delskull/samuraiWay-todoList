@@ -29,11 +29,7 @@ export const Users = () => {
     return <div className={'container'}>
         {users.map(user  => (
             <UserCard
-                key={user.id}
-                name={user.name}
-            age={user.age}
-            email={user.email}
-            avatar={user.avatar}/>
+                {...user}/>
         ))}
     </div>
 }
