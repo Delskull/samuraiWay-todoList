@@ -15,6 +15,6 @@ export function Game() {
 
     return <div>
         {state === 'counter' && <Counter onFinish={onFinish}/>}
-        {state === 'elephant' && <Elephant onStart = {onStart}/>}
+        {state === 'elephant' && <Elephant onStart = {onStart}/> }
     </div>
 }
