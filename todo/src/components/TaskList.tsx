@@ -1,19 +1,8 @@
 import {useEffect, useState} from "react";
+import {TaskItem} from "./TaskItem.tsx";
 
-
-const colors: Colors = {
-
-    0: '#ffffff',
-    1: '#ffd7b5',
-    2: '#ffb38a',
-    3: '#ff9248',
-    4: '#ff6700',
-}
-
-
-export function TaskList() {
+export function TaskList(props) {
     const [tasks, setTasks] = useState(null)
-    const [selectedTaskId, setSelectedTaskId] = useState(null)
 
     useEffect(() => {
         fetch('https://trelly.it-incubator.app/api/1.0/boards/tasks', {
@@ -34,34 +23,16 @@ export function TaskList() {
 
     return <ul>
         {tasks.map((task) => {
-            return <li
+            return <TaskItem
                 key={task.id}
-                className={'li__task'}
-                onClick={() => {
-                    setSelectedTaskId(task.id)
-                 //   setBoardId(task.attributes.boardId)
+                task={task}
+                isSelected={task.id === props.selectedTaskId}
+                onTaskSelected={props.onTaskSelected}
 
-                }}
-                style={
-                    {
-                        backgroundColor: colors[task.attributes.priority] || 'white',
-                        border: selectedTaskId === task.id ? '4px solid blue' : '4px solid black'
 
-                    }
-                }
-            >
-                <div className={'li__div'}><span className={'li__span'}> Заголовок: </span> <span style={{
-                    textDecorationLine: task.attributes.status >= 2 ? 'line-through' : 'none'
-                }}> {task.attributes.title} </span></div>
-                <div className={'li__div'}><span
-                    className={'li__span'}> Статус: </span> {task.attributes.status} <input
-                    type={"checkbox"}
-                    checked={task.attributes.status >= 2}/>
-                </div>
-                <div className={'li__div'}><span className={'li__span'}> </span> Дата создания
-                    задачи: {new Date(task.attributes.addedAt).toLocaleDateString()}</div>
-
-            </li>
+            />
         })}
     </ul>
 }
+
+
