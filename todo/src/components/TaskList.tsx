@@ -1,7 +1,7 @@
 import {useEffect, useState} from "react";
 import {TaskItem} from "./TaskItem.tsx";
 
-export function TaskList(props) {
+export function TaskList({selectedTaskId,onTaskSelected}) {
     const [tasks, setTasks] = useState(null)
 
     useEffect(() => {
@@ -21,18 +21,26 @@ export function TaskList(props) {
         return <div className={'li__div li__span'}>Задачи отсутствуют</div>
     }
 
-    return <ul>
-        {tasks.map((task) => {
-            return <TaskItem
-                key={task.id}
-                task={task}
-                isSelected={task.id === props.selectedTaskId}
-                onTaskSelected={props.onTaskSelected}
+    const handleResetClick = () => {
+        onTaskSelected(null)
+    }
+
+    return <div>
+        <button onClick={handleResetClick}>Reset</button>
+        <hr/>
+        <ul>
+            {tasks.map((task) => {
+                return <TaskItem
+                    key={task.id}
+                    task={task}
+                    isSelected={task.id === selectedTaskId}
+                    onTaskSelected={onTaskSelected}
 
 
-            />
-        })}
-    </ul>
+                />
+            })}
+        </ul>
+    </div>
 }
 
 

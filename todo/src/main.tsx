@@ -16,7 +16,7 @@ function MainPage() {
 
     const onTaskSelected = (taskid,boardId) => {
         setSelectedTaskId(taskid)
-        setBoardId(boardId)
+        setBoardId?.(boardId)
 
     }
     return <div>

@@ -1,13 +1,13 @@
 import {useEffect, useState} from "react";
 
-export function TaskDetails(props) {
+export function TaskDetails({selectedTaskId,boardId}) {
 
     const [selectedTask, setSelectedTask] = useState(null)
-    const selectedTaskId = props.selectedTaskId
-    const boardId = props.boardId
+
 
     useEffect(() => {
         if (!selectedTaskId) {
+            setSelectedTask(null)
             return
         }
 
