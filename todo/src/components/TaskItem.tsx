@@ -1,9 +1,43 @@
-export function TaskItem ({task,isSelected,onTaskSelected}) {
+
+type GlobalTaskListItemDto = {
+    id: string
+    title: string
+    boardId: string
+    status: 0 | 1 | 2 | 3
+    priority: 0 | 1 | 2 | 3 | 4
+    addedAt: string
+    attachmentsCount: number
+}
+
+export type GlobalTaskListItemJsonApiData = {
+    id: string
+    type: string
+    attributes: GlobalTaskListItemDto
+}
+
+type Props = {
+    task: GlobalTaskListItemJsonApiData
+    isSelected: boolean
+    onTaskSelected: (taskId:string,boardId:string) => void
+}
+
+export function TaskItem ({task,isSelected,onTaskSelected}:Props) {
 
     const handleSelectClick = () => {
         onTaskSelected(task.id,task.attributes.boardId)
     }
-    const colors = {
+
+    type Colors = {
+        0: string
+        1: string
+        2: string
+        3: string
+        4: string
+    }
+
+
+
+    const colors: Colors = {
 
         0: '#ffffff',
         1: '#ffd7b5',
@@ -12,13 +46,14 @@ export function TaskItem ({task,isSelected,onTaskSelected}) {
         4: '#ff6700',
     }
 
+
     return <li
         key={task.id}
         className={'li__task'}
         onClick={handleSelectClick}
         style={
             {
-                backgroundColor: colors[task.attributes.priority] || 'white',
+                backgroundColor: colors[task.attributes.priority as keyof Colors] || 'white',
                 border: isSelected ? '4px solid blue' : '4px solid black'
 
             }

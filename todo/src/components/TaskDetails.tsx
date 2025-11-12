@@ -1,8 +1,35 @@
 import {useEffect, useState} from "react";
 
-export function TaskDetails({selectedTaskId,boardId}) {
 
-    const [selectedTask, setSelectedTask] = useState(null)
+type TaskDetailsData = {
+    id:	string
+    type:	string
+    attributes: TaskDetailsDto
+}
+
+type TaskDetailsDto = {
+    id:	string
+    title:	string
+    description: string | null
+boardId:	string
+boardTitle:	string
+order:	number
+status: 0 | 1 | 2 | 3
+priority: 0 | 1 | 2 | 3 | 4
+startDate:	{}
+deadline:	{}
+addedAt:	string
+updatedAt: string
+attachments: Array<string>
+}
+type Props = {
+    selectedTaskId: string | null
+    boardId: string | null
+}
+
+export function TaskDetails({selectedTaskId, boardId}:Props) {
+
+    const [selectedTask, setSelectedTask] = useState<TaskDetailsData | null>(null)
 
 
     useEffect(() => {
