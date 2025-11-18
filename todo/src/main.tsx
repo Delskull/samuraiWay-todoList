@@ -1,7 +1,7 @@
 import {createRoot} from 'react-dom/client'
 import './App.css'
-import {TaskList} from "./components/TaskList.tsx";
-import {TaskDetails} from "./components/TaskDetails.tsx";
+import {TaskList} from "./ui/TaskList.tsx";
+import {TaskDetails} from "./ui/TaskDetails.tsx";
 import {useState} from "react";
 
 

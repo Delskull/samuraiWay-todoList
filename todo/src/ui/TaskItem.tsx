@@ -1,19 +1,5 @@
+import type {GlobalTaskListItemJsonApiData} from "../dal/api.ts";
 
-type GlobalTaskListItemDto = {
-    id: string
-    title: string
-    boardId: string
-    status: 0 | 1 | 2 | 3
-    priority: 0 | 1 | 2 | 3 | 4
-    addedAt: string
-    attachmentsCount: number
-}
-
-export type GlobalTaskListItemJsonApiData = {
-    id: string
-    type: string
-    attributes: GlobalTaskListItemDto
-}
 
 type Props = {
     task: GlobalTaskListItemJsonApiData

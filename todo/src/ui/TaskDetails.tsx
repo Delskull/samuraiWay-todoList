@@ -1,27 +1,7 @@
 import {useEffect, useState} from "react";
+import {getTask, type TaskDetailsData} from "../dal/api.ts";
 
 
-type TaskDetailsData = {
-    id:	string
-    type:	string
-    attributes: TaskDetailsDto
-}
-
-type TaskDetailsDto = {
-    id:	string
-    title:	string
-    description: string | null
-boardId:	string
-boardTitle:	string
-order:	number
-status: 0 | 1 | 2 | 3
-priority: 0 | 1 | 2 | 3 | 4
-startDate:	{}
-deadline:	{}
-addedAt:	string
-updatedAt: string
-attachments: Array<string>
-}
 type Props = {
     selectedTaskId: string | null
     boardId: string | null
@@ -33,18 +13,14 @@ export function TaskDetails({selectedTaskId, boardId}:Props) {
 
 
     useEffect(() => {
-        if (!selectedTaskId) {
+        if (!selectedTaskId || !boardId) {
             setSelectedTask(null)
             return
         }
 
-        fetch('https://trelly.it-incubator.app/api/1.0/boards/' + boardId + '/tasks/' + selectedTaskId, {
-            headers: {
-                'api-key': 'a4ac3cd8-354c-4073-b62b-8eac19a5e922'
-            }
-        }).then(res => res.json())
+        getTask(boardId,selectedTaskId)
             .then(json => setSelectedTask(json.data))
-    }, [selectedTaskId]);
+    }, [selectedTaskId, boardId]);
 
     return <div className={'info__block'}>
         <h2> Task details </h2>
