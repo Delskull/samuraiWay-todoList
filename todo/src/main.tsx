@@ -119,7 +119,71 @@ const GreetingCard = () => {
     </div>
 
 }
+// lesson 24
 
+
+export const Counter = () => {
+    const { count, inc, dec, reset, changeStep} = useCounter(0, 1,3)
+
+    return <div>
+        <h2>{count}</h2>
+        <h3>⏰ Автосброс через 3 сек</h3>
+        <div>
+            <button onClick={inc}>Увеличить</button>
+            <button onClick={dec}>Уменьшить</button>
+            <button onClick={reset}>Сбросить</button>
+            <button onClick={changeStep}>Установить шаг 5</button>
+        </div>
+    </div>
+}
+
+export const CounterWithoutAutoReset = () => {
+    const { count, inc, dec, reset, changeStep} = useCounter(5, 5,0)
+    return <div>
+        <h2>{count}</h2>
+        <h3>🔒 Без автосброса</h3>
+        <div>
+            <button onClick={inc}>Увеличить</button>
+            <button onClick={dec}>Уменьшить</button>
+            <button onClick={reset}>Сбросить</button>
+            <button onClick={changeStep}>Установить шаг 5</button>
+        </div>
+    </div>
+}
+
+const useCounter = (startValue:number = 0,startStep:number = 1, autoResetTime:number = 0) => {
+    const [count, setCount] = useState(startValue)
+    const [step, setStep] = useState(startStep)
+
+    useEffect(() => {
+        if (autoResetTime === 0 || autoResetTime === null){
+            return
+        }
+        const intervalID = setInterval(() => {
+            setCount(startValue)
+        }, autoResetTime * 1000)
+        return () => clearInterval(intervalID)
+    }, [autoResetTime,startValue])
+
+    const inc = () => {
+        setCount(prev => prev + step)
+
+    }
+    const dec = () => {
+        setCount(prev => prev - step)
+    }
+    const reset = () => {
+        setCount(startValue)
+        setStep(startStep)
+    }
+    const changeStep = () => {
+        alert('шаг установлен на 5')
+        setStep(5)
+
+    }
+
+    return { count, inc, dec, reset, changeStep}
+}
 
 
 
@@ -130,6 +194,8 @@ createRoot(document.getElementById('root')!).render(
 <div>
 <TitleEditor/>
     <GreetingCard/>
+    <Counter/>
+    <CounterWithoutAutoReset/>
 
 </div>
 )
