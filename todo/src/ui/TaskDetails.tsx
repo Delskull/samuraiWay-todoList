@@ -1,5 +1,4 @@
-import {useEffect, useState} from "react";
-import {getTask, type TaskDetailsData} from "../dal/api.ts";
+import {useTaskDetails} from "../bll/useTaskDetails.tsx";
 
 
 type Props = {
@@ -9,34 +8,24 @@ type Props = {
 
 export function TaskDetails({selectedTaskId, boardId}:Props) {
 
-    const [selectedTask, setSelectedTask] = useState<TaskDetailsData | null>(null)
+    const {taskDetails } = useTaskDetails(selectedTaskId, boardId)
 
-
-    useEffect(() => {
-        if (!selectedTaskId || !boardId) {
-            setSelectedTask(null)
-            return
-        }
-
-        getTask(boardId,selectedTaskId)
-            .then(json => setSelectedTask(json.data))
-    }, [selectedTaskId, boardId]);
 
     return <div className={'info__block'}>
         <h2> Task details </h2>
-        {!selectedTask && !selectedTaskId && 'Task is not selected'}
-        {!selectedTask && selectedTaskId && 'Loading...'}
-        {selectedTask && selectedTaskId && selectedTask.id !== selectedTaskId && 'Loading...'}
-        {selectedTask && selectedTaskId && selectedTask.id == selectedTaskId &&
+        {!taskDetails && !selectedTaskId && 'Task is not selected'}
+        {!taskDetails && selectedTaskId && 'Loading...'}
+        {taskDetails && selectedTaskId && taskDetails.id !== selectedTaskId && 'Loading...'}
+        {taskDetails && selectedTaskId && taskDetails.id == selectedTaskId &&
             <div>
                 <ul>
-                    <li className={'li__description'}> Title - {selectedTask.attributes.title}</li>
+                    <li className={'li__description'}> Title - {taskDetails.attributes.title}</li>
                     <li className={'li__description'}> BoardTitle
-                        - {selectedTask.attributes.boardTitle}</li>
-                    {selectedTask.attributes.description === null ?
+                        - {taskDetails.attributes.boardTitle}</li>
+                    {taskDetails.attributes.description === null ?
                         <li className={'li__description'}> Description - No description</li> :
                         <li className={'li__description'}> Description
-                            - {selectedTask.attributes.description}</li>}
+                            - {taskDetails.attributes.description}</li>}
                 </ul>
             </div>
         }

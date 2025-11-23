@@ -1,7 +1,5 @@
-import {useEffect, useState} from "react";
 import {TaskItem} from "./TaskItem.tsx";
-import {getTasks, type GlobalTaskListItemJsonApiData} from "../dal/api.ts";
-
+import {useTasks} from "../bll/useTasks.tsx";
 
 
 type Props = {
@@ -10,12 +8,7 @@ type Props = {
 }
 
 export function TaskList({selectedTaskId, onTaskSelected}: Props) {
-    const [tasks, setTasks] = useState<Array<GlobalTaskListItemJsonApiData> | null>(null)
-
-    useEffect(() => {
-        getTasks()
-            .then(json => setTasks(json.data))
-    }, []);
+    const { tasks } = useTasks()
 
     if (tasks === null || tasks === undefined) {
         return <div className={'li__div li__span'}>Загрузка...</div>
