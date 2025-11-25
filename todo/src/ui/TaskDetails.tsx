@@ -1,5 +1,5 @@
 import {useTaskDetails} from "../bll/useTaskDetails.tsx";
-
+import styles from './TaskDetails.module.css'
 
 type Props = {
     selectedTaskId: string | null
@@ -11,7 +11,7 @@ export function TaskDetails({selectedTaskId, boardId}:Props) {
     const {taskDetails } = useTaskDetails(selectedTaskId, boardId)
 
 
-    return <div className={'info__block'}>
+    return <div className={styles.container}>
         <h2> Task details </h2>
         {!taskDetails && !selectedTaskId && 'Task is not selected'}
         {!taskDetails && selectedTaskId && 'Loading...'}
@@ -19,12 +19,12 @@ export function TaskDetails({selectedTaskId, boardId}:Props) {
         {taskDetails && selectedTaskId && taskDetails.id == selectedTaskId &&
             <div>
                 <ul>
-                    <li className={'li__description'}> Title - {taskDetails.attributes.title}</li>
-                    <li className={'li__description'}> BoardTitle
+                    <li className={styles.item__list}> Title - {taskDetails.attributes.title}</li>
+                    <li className={styles.item__list}> BoardTitle
                         - {taskDetails.attributes.boardTitle}</li>
                     {taskDetails.attributes.description === null ?
-                        <li className={'li__description'}> Description - No description</li> :
-                        <li className={'li__description'}> Description
+                        <li className={styles.item__list}> Description - No description</li> :
+                        <li className={styles.item__list}> Description
                             - {taskDetails.attributes.description}</li>}
                 </ul>
             </div>

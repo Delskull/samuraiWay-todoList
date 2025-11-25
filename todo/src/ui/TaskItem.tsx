@@ -1,59 +1,36 @@
 import type {GlobalTaskListItemJsonApiData} from "../dal/api.ts";
+import styles from './TaskItem.module.css'
 
 
 type Props = {
     task: GlobalTaskListItemJsonApiData
     isSelected: boolean
-    onTaskSelected: (taskId:string,boardId:string) => void
+    onTaskSelected: (taskId: string, boardId: string) => void
 }
 
-export function TaskItem ({task,isSelected,onTaskSelected}:Props) {
+export function TaskItem({task, isSelected, onTaskSelected}: Props) {
 
     const handleSelectClick = () => {
-        onTaskSelected(task.id,task.attributes.boardId)
+        onTaskSelected(task.id, task.attributes.boardId)
     }
 
-    type Colors = {
-        0: string
-        1: string
-        2: string
-        3: string
-        4: string
-    }
-
-
-
-    const colors: Colors = {
-
-        0: '#ffffff',
-        1: '#ffd7b5',
-        2: '#ffb38a',
-        3: '#ff9248',
-        4: '#ff6700',
-    }
-
+    const className = styles.list + ' ' + (isSelected ? styles.list__item_select : '')
 
     return <li
         key={task.id}
-        className={'li__task'}
+        className={className}
         onClick={handleSelectClick}
-        style={
-            {
-                backgroundColor: colors[task.attributes.priority as keyof Colors] || 'white',
-                border: isSelected ? '4px solid blue' : '4px solid black'
-
-            }
-        }
     >
-        <div className={'li__div'}><span className={'li__span'}> Заголовок: </span> <span style={{
-            textDecorationLine: task.attributes.status >= 2 ? 'line-through' : 'none'
-        }}> {task.attributes.title} </span></div>
-        <div className={'li__div'}><span
-            className={'li__span'}> Статус: </span> {task.attributes.status} <input
+        <div className={styles.list__item}><span className={styles.list__item_content}> Заголовок: </span> <span
+            style={{
+                textDecorationLine: task.attributes.status >= 2 ? 'line-through' : 'none'
+            }}> {task.attributes.title} </span></div>
+        <div className={styles.list__item}><span
+            className={styles.list__item_content}> Статус: </span> {task.attributes.status} <input
             type={"checkbox"}
             checked={task.attributes.status >= 2}/>
         </div>
-        <div className={'li__div'}><span className={'li__span'}> </span> Дата создания
+        <div className={styles.list__item}><span className={styles.list__item_content}> </span> Дата создания
             задачи: {new Date(task.attributes.addedAt).toLocaleDateString()}</div>
 
     </li>

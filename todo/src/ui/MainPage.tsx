@@ -1,8 +1,9 @@
 import {createRoot} from 'react-dom/client'
-import './App.css'
-import {TaskList} from "./ui/TaskList.tsx";
-import {TaskDetails} from "./ui/TaskDetails.tsx";
-import {useTaskSelection} from "./bll/useTaskSelection.tsx";
+import '../App.css'
+import styles from './MainPage.module.css'
+import {TaskList} from "./TaskList.tsx";
+import {TaskDetails} from "./TaskDetails.tsx";
+import {useTaskSelection} from "../bll/useTaskSelection.tsx";
 
 
 createRoot(document.getElementById('root')!).render(
@@ -13,7 +14,7 @@ function MainPage() {
     const { selectedTaskId,boardId, onTaskSelected } = useTaskSelection()
 
     return <div>
-        <div style={{display: 'flex', gap: '30px'}}>
+        <div className= {styles.container}>
         <TaskList
             selectedTaskId={selectedTaskId}
             onTaskSelected={onTaskSelected}/>
