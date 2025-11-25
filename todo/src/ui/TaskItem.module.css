@@ -8,10 +8,16 @@
 .list__item {
     margin: 5px
 }
+.list__item_throw {
+    text-decoration-line: line-through;
+}
 .list__item_content {
     font-weight: bold;
 }
 .list__item_select{
     background-color: gold;
     border: 4px solid blue;
+}
+.list__item_select_status {
+    background-color: bisque;
 }
