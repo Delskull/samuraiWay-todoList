@@ -1,3 +1,3 @@
 export function PageTitle() {
-    return <h1>Trelly</h1>
+    return <h1>Trellyy</h1>
 }
